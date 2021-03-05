@@ -7,5 +7,9 @@
 -   [Starter kit instructions](STARTERKIT_INSTRUCTIONS.md)
 
 ### ⟹ [Insert your documentation here](ENTRYFORM.md) <<
+<<<<<<< HEAD
 
 > Test commit
+=======
+ 
+>>>>>>> c593b233f5b16f7827acd68ce3d08d7e9367e4ff
