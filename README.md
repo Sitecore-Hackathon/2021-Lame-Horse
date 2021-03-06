@@ -116,6 +116,8 @@ The selected items will have a new version created in the target selected langua
 
 ### Publish
 
+> Only publishable items will be published. To have your items published, make sure they are in the final state of the workflow and have no publishing restrictions set.
+
 1. Following the same procedure described above to generate a report with Powershell Extensions, In the **Select processing script** combobox, select the option **Processing/Publish**.
 
 2. In the **Publish Items** dialog, select the publish option and click OK.
