@@ -44,6 +44,8 @@ Video](https://youtu.be/S6i68yu3W3U)
 
 ## Development instructions
 
+> The following section is only required if you want to use the solution to de-serialize the items.
+
 1.  Install Sitecore Management Services Module 2.0.0 and Sitecore Powershel Extensions Module 6.2 on Sitecore
 
 2.  At the root folder of the source code run the following command line:
