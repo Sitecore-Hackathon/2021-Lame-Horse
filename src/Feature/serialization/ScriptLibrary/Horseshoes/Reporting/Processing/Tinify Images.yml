@@ -121,6 +121,11 @@ SharedFields:
             return [Sitecore.Resources.Media.MediaManager]::GetMediaUrl($mediaItem, $mediaOptions) 
         }
             
+        $result = Show-Confirm -Title "This operation can take a long time to finish. Are you sure you want to continue?"
+        if($result -ne "yes") {
+            Exit
+        }
+            
         $images = $params.Items | Where-Object {($_.TemplateId -eq "{F1828A2C-7E5D-4BBD-98CA-320474871548}" -or $_.TemplateId -eq "{DAF085E8-602E-43A6-8299-038FF171349F}" -or $_.TemplateId -eq "{C97BA923-8009-4858-BDD5-D8BE5FCCECF7}" -or $_.TemplateId -eq "{EB3FB96C-D56B-4AC9-97F8-F07B24BB9BF7}") }
     
         Write-Host "Images to optimize: " $images.count
@@ -174,11 +179,11 @@ Languages:
         sitecore\Admin
     - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
       Hint: __Revision
-      Value: "fe88616a-5f4c-4edf-99f1-9a3abfd2d47a"
+      Value: "8d1143fa-f5f8-47b8-87ca-9bad01896ead"
     - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
       Hint: __Updated by
       Value: |
-        sitecore\Admin
+        sitecore\admin
     - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
       Hint: __Updated
-      Value: 20210306T124506Z
+      Value: 20210306T150551Z
