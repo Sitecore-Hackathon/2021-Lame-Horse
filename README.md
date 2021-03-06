@@ -32,8 +32,7 @@ The module comes with a good number of useful processing scripts for various nee
 -   Sitecore Powershel Extensions Module 6.2
 
 ## Installation instructions
-
-1.  Install Sitecore Powershel Extensions Module 6.2
+1.  Install [Sitecore Powershel Extensions Module 6.2](https://github.com/SitecorePowerShell/Console/releases/tag/6.2)
 2.  Install the package [LameHorse.Horseshoes-1.0.zip](/sc.packages/LameHorse.Horseshoes-1.0.zip)
 
 ## Configuration
