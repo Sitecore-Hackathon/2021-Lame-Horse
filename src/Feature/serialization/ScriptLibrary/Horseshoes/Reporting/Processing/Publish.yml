@@ -7,9 +7,13 @@ SharedFields:
 - ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
   Hint: Script
   Value: |
-    Show-Alert "OLA"
     param($params)
-    Show-Alert $params.Length
+    
+    Show-Alert "OLA"
+    Show-Alert $params.Items
+    Show-Alert $params.Items.Length
+    Show-Alert $params.Items[0].Paths.Path
+    
     return $true
     
     <#
@@ -83,11 +87,11 @@ Languages:
         sitecore\admin
     - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
       Hint: __Revision
-      Value: "de69e6e2-e923-488f-8172-bc513e969b7d"
+      Value: "4dcf05f4-4e4c-46da-abbe-f71635887b74"
     - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
       Hint: __Updated by
       Value: |
         sitecore\admin
     - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
       Hint: __Updated
-      Value: 20210306T044606Z
+      Value: 20210306T063233Z

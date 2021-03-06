@@ -40,21 +40,33 @@ SharedFields:
     
     # Get items from report list
     $format = & ([scriptblock]::Create($exportProperty))
-    $reportResult = [PSCustomObject]$exportData | Select-Object -Property $format 
+    $reportResult = [PSCustomObject]$exportData | Select-Object -Property $format
     if ($reportResult.Length -eq $null){
         $reportResult = @($reportResult)
     }
-    
-    Show-Alert $reportResult.Length
+    $reportItems = @();
+    Foreach($entry in $reportResult){
+        $path = $entry.Path
+        $item = Get-Item -Path "master:$($path)"
+        $reportItems = $reportItems + $item
+    }
     
     # Invoke script
-    $scriptReturn = Invoke-Script -Item $script -ArgumentList $reportResult
+    $arguments = @{
+        Items = $reportItems
+    }
+    $scriptReturn = $script | Invoke-Script -ArgumentList $arguments
     
-    Show-Alert $scriptReturn
-    
-    if ($scriptReturn) {
-        $count = $reportResult.Length
-        Show-Alert " $($count) items processed successfuly!"
+    # Show results
+    if ($scriptReturn -eq $true) {
+        $count = $reportItems.Length
+        Show-Alert "$($count) items processed successfuly!"
+    }
+    elseif ($scriptReturn -eq $false) {
+        Show-Alert "Error processing items."
+    }
+    else {
+        Show-Alert "Error processing items: $scriptReturn"
     }
 Languages:
 - Language: da
@@ -98,11 +110,11 @@ Languages:
       Value: 20130911T202600Z
     - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
       Hint: __Revision
-      Value: "afbc7066-4f44-4609-9fa2-d7b9523959fc"
+      Value: "b32a01d3-c953-4a78-af29-e5a91f0e0ae7"
     - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
       Hint: __Updated by
       Value: |
         sitecore\admin
     - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
       Hint: __Updated
-      Value: 20210306T044518Z
+      Value: 20210306T063442Z
