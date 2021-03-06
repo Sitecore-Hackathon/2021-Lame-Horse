@@ -10,27 +10,35 @@ SharedFields:
     param($params)
     
     try {
+    
+        # Get language options
+        $languageNodes = [Sitecore.Xml.XmlUtil]::GetChildNodes("language", [Sitecore.Xml.XmlUtil]::GetChildNode("languages", [Sitecore.Configuration.Factory]::GetConfigNode("languageDefinitions")));
+        $options = [ordered]@{""=""}
         
-        # Get options
-        $options = @{
-            "Polish"="pl-pl"
-            "Portuguese"="pt-PT"
-            "Estonian"="et-EE"
-        }    
+        foreach($languageNode in $languageNodes){
+            $key = $languageNode.id
+            if (-not [string]::IsNullOrEmpty($languageNode.region)){
+                $key += "-$($languageNode.region)"
+            }
+            $cultureInfo = [Sitecore.Globalization.Language]::CreateCultureInfo($key)
+            $value = [Sitecore.Globalization.Language]::GetDisplayName($cultureInfo)
+            $options.add($value,$key)
+        }
+        
         $props = @{
             Parameters = @(
                 @{
-                    Name="mode"; 
-                    Title="Create version for the item"; 
+                    Name="language"; 
+                    Title="Language"; 
                     Options=$options; 
-                    Editor="radio"; 
-                    Value="Smart"
+                    Editor="tristate"; 
+                    Value="";
                     Mandatory = $true;
                 }
             )
-            Title = "Create version for the item"
+            Title = "Create empty version for a given language"
             Description = "Select the language"
-            Width = 300
+            Width = 500
             Height = 300
         }
         $result = Read-Variable @props
@@ -40,10 +48,11 @@ SharedFields:
         
         $items = $params.Items
         Foreach ($item in $items) {
-            Add-ItemVersion $item -Language "en" -TargetLanguage $mode
+            Add-ItemVersion $item -Language "en" -TargetLanguage $language
         }
     }
     catch {
+        Write-Host $_
         return $false
     }
     return $true
@@ -65,11 +74,11 @@ Languages:
         sitecore\jneto
     - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
       Hint: __Revision
-      Value: "d2459302-59e9-4818-baa4-06dd94f93232"
+      Value: "7e706100-e090-4a8b-a3b5-c6db0c12b4e3"
     - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
       Hint: __Updated by
       Value: |
-        sitecore\jneto
+        sitecore\admin
     - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
       Hint: __Updated
-      Value: 20210306T124729Z
+      Value: 20210306T162601Z
