@@ -89,9 +89,8 @@ SharedFields:
             Exit
         }
        
-        #$items = $params.Items
-        $items = Get-Item -Path "master://sitecore/content/Home"
-        
+        $items = $params.Items
+    
         Foreach ($item in $items) {
             Add-ItemVersion $item -Language "en" -TargetLanguage $language
             
@@ -137,11 +136,11 @@ Languages:
         sitecore\jneto
     - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
       Hint: __Revision
-      Value: "dff79e95-96e3-4165-9593-5dc5abb60434"
+      Value: "02c50ba3-adf3-4b05-a7f3-13c3927908da"
     - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
       Hint: __Updated by
       Value: |
         sitecore\admin
     - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
       Hint: __Updated
-      Value: 20210306T172357Z
+      Value: 20210306T175152Z
