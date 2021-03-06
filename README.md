@@ -1,4 +1,4 @@
-![Hackathon Logo](docs/images/hackathon.png?raw=true "Hackathon Logo")
+![Go Horse Cup](docs/images/gohorsecup.webp?raw=true "Go Horse Cup")
 
 ## Team name
 
