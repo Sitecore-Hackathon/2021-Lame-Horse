@@ -2,7 +2,7 @@
 ID: "ca2b3f40-0ad0-4180-b289-b64b6e844237"
 Parent: "a5f8e957-c6c6-4f99-9244-2def9adcf522"
 Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
-Path: /sitecore/system/Modules/PowerShell/Script Library/Horseshoes/Reporting/Processing/Remove versions
+Path: /sitecore/system/Modules/PowerShell/Script Library/Horseshoes/Reporting/Processing/Remove versions from language
 SharedFields:
 - ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
   Hint: Script
@@ -11,26 +11,42 @@ SharedFields:
     
     try {
         
-        # Get options
-        $options = @{
-            "English"="en"
-        }    
+        # Long duration process warning
+        $result = Show-Confirm -Title "This operation can take a long time to finish. Are you sure you want to continue?"
+        if($result -ne "yes") {
+            Exit
+        }
+        
+        # Get language options
+        $languageNodes = [Sitecore.Xml.XmlUtil]::GetChildNodes("language", [Sitecore.Xml.XmlUtil]::GetChildNode("languages", [Sitecore.Configuration.Factory]::GetConfigNode("languageDefinitions")));
+        $options = [ordered]@{""=""}
+        foreach($languageNode in $languageNodes){
+            $key = $languageNode.id
+            if (-not [string]::IsNullOrEmpty($languageNode.region)){
+                $key += "-$($languageNode.region)"
+            }
+            $cultureInfo = [Sitecore.Globalization.Language]::CreateCultureInfo($key)
+            $value = [Sitecore.Globalization.Language]::GetDisplayName($cultureInfo)
+            $options.add($value,$key)
+        }
+        
         $props = @{
             Parameters = @(
                 @{
-                    Name="mode"; 
-                    Title="Keep the following language:"; 
+                    Name="language"; 
+                    Title="Language"; 
                     Options=$options; 
-                    Editor="radio"; 
-                    Value="Smart"
+                    Editor="tristate"; 
+                    Value="";
                     Mandatory = $true;
                 }
             )
-            Title = "Delete version"
+            Title="Remove all version from a given language"; 
             Description = "Select the language"
-            Width = 300
-            Height = 300
-        }
+            Width = 500
+            Height = 250
+        }    
+        
         $result = Read-Variable @props
         if($result -ne "ok") {
             Exit
@@ -40,7 +56,7 @@ SharedFields:
         Foreach ($item in $items) {
             foreach ($version in $item.Versions.GetVersions($true))
             {
-                if ($version.Language -ne $mode)
+                if ($version.Language -eq $language)
                 {
                     Remove-ItemVersion $version
                     Write-Host $version.ID " - " $version.Language "- deleted"
@@ -71,11 +87,11 @@ Languages:
         sitecore\jneto
     - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
       Hint: __Revision
-      Value: "30b7f24d-06a0-462e-b9ea-66c26d3e4bdb"
+      Value: "5aca7ca0-5623-42cf-bdcc-26171b78cfba"
     - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
       Hint: __Updated by
       Value: |
-        sitecore\jneto
+        sitecore\admin
     - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
       Hint: __Updated
-      Value: 20210306T122125Z
+      Value: 20210306T172658Z

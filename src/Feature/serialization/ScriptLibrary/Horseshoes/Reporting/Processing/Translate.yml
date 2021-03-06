@@ -48,6 +48,11 @@ SharedFields:
     
     try 
     {
+        # Long duration process warning
+        $result = Show-Confirm -Title "This operation can take a long time to finish. Are you sure you want to continue?"
+        if($result -ne "yes") {
+            Exit
+        }
         
         # Get language options
         $languageNodes = [Sitecore.Xml.XmlUtil]::GetChildNodes("language", [Sitecore.Xml.XmlUtil]::GetChildNode("languages", [Sitecore.Configuration.Factory]::GetConfigNode("languageDefinitions")));
@@ -73,7 +78,7 @@ SharedFields:
                     Mandatory = $true;
                 }
             )
-            Title = "Create empty version for a given language"
+            Title = "Translate item from English into any target language"
             Description = "Select the language"
             Width = 500
             Height = 250
@@ -132,11 +137,11 @@ Languages:
         sitecore\jneto
     - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
       Hint: __Revision
-      Value: "1592d8fe-8daa-4c99-806d-21084423b142"
+      Value: "dff79e95-96e3-4165-9593-5dc5abb60434"
     - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
       Hint: __Updated by
       Value: |
         sitecore\admin
     - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
       Hint: __Updated
-      Value: 20210306T171638Z
+      Value: 20210306T172357Z
