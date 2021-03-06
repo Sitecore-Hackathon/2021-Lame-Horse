@@ -29,7 +29,6 @@ The module comes with a good number of useful processing scripts for various nee
 ## Pre-requisites and Dependencies
 
 -   Sitecore 10.1 - Initial Release
--   Sitecore Management Services Module 2.0.0
 -   Sitecore Powershel Extensions Module 6.2
 
 ## Installation instructions
@@ -37,45 +36,9 @@ The module comes with a good number of useful processing scripts for various nee
 1.  Install Sitecore Powershel Extensions Module 6.2
 2.  Install the package [LameHorse.Horseshoes-1.0.zip](/sc.packages/LameHorse.Horseshoes-1.0.zip)
 
-## Development instructions
-
-> The following section is only required if you want to use the solution to de-serialize the items.
-
-1.  Install Sitecore Management Services Module 2.0.0 and Sitecore Powershel Extensions Module 6.2 on Sitecore
-
-2.  At the root folder of the source code run the following command line:
-
-```powershell
-dotnet tool restore
-```
-
-This command line will install locally Sitecore CLI version 2.0.0.
-
-```
-dotnet sitecore login --authority https://[prefix].identityserver --cm https://[prefix].sc --allow-write true
-```
-
-![Authentication Step 1](/docs/images/authentication-02.png "Authentication Step 1")
-
-A new browser window will open asking to enter credentials and allow Sitecore CLI to access your instance.
-
-![Authentication Step 2](/docs/images/authentication-01.png "Authentication Step 2")
-
-![Authentication Step 3](/docs/images/authentication-03.png "Authentication Step 3")
-
-![Authentication Step 4](/docs/images/authentication-04.png "Authentication Step 4")
-
-![Authentication Step 4](/docs/images/authentication-05.png "Authentication Step 4")
-
-3. Next run the following command line:
-
-```powershell
-dotnet sitecore ser push
-```
-
-This command line will push the serialized items from the file system into the Sitecore instance.
-
 ## Configuration
+
+> The following configurations are optional for evaluation purposes. However, in a real-life situation, you would follow the instructions below to setup your own API information.
 
 **Tinify**
 
@@ -203,6 +166,47 @@ The selected items will old text replaced in all fields.
 
 A Sitecore package will be downloaded with the items listed in the report.
 
-## Comments
 
-If you'd like to make additional comments that is important for your module entry.
+## Development instructions
+
+> The following section is only required if you want to use the solution to de-serialize the items.
+
+### Development Pre-requisites
+
+-   Sitecore Management Services Module 2.0.0
+
+### Development installation steps
+
+1.  Install Sitecore Management Services Module 2.0.0 and Sitecore Powershel Extensions Module 6.2 on Sitecore
+
+2.  At the root folder of the source code run the following command line:
+
+```powershell
+dotnet tool restore
+```
+
+This command line will install locally Sitecore CLI version 2.0.0.
+
+```
+dotnet sitecore login --authority https://[prefix].identityserver --cm https://[prefix].sc --allow-write true
+```
+
+![Authentication Step 1](/docs/images/authentication-02.png "Authentication Step 1")
+
+A new browser window will open asking to enter credentials and allow Sitecore CLI to access your instance.
+
+![Authentication Step 2](/docs/images/authentication-01.png "Authentication Step 2")
+
+![Authentication Step 3](/docs/images/authentication-03.png "Authentication Step 3")
+
+![Authentication Step 4](/docs/images/authentication-04.png "Authentication Step 4")
+
+![Authentication Step 4](/docs/images/authentication-05.png "Authentication Step 4")
+
+3. Next run the following command line:
+
+```powershell
+dotnet sitecore ser push
+```
+
+This command line will push the serialized items from the file system into the Sitecore instance.
