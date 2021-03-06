@@ -1,0 +1,144 @@
+﻿---
+ID: "fe306375-3b06-4baa-87ec-517c957c3f73"
+Parent: "a5f8e957-c6c6-4f99-9244-2def9adcf522"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: /sitecore/system/Modules/PowerShell/Script Library/Horseshoes/Reporting/Processing/Create Version and Translate
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    param($params)
+    
+    ##TRANSLATION
+    
+    function Get-Translation
+    {
+        Param ($TranslateText, $languageCode)
+    
+    	$Body = ConvertTo-Json -InputObject @( @{  Text = $TranslateText }  ) 
+    
+    	$Headers = @{
+    		"Ocp-Apim-Subscription-Key" = "23664222a23041d9ac98e07ab1810c3b";
+    		"Ocp-Apim-Subscription-Region" = "eastus"
+    	}
+    
+    	$Uri = "https://api.cognitive.microsofttranslator.com"
+    	$Resource = "translate?api-version=3.0&from=en&to=" + $languageCode
+    
+    	$Response = Invoke-WebRequest -UseBasicParsing `
+    		-Uri "$Uri/$Resource" `
+    		-Method POST `
+    		-Headers $Headers `
+    		-Body $Body `
+    		-ContentType "application/json"
+    
+    	Write-Host $Response.Content
+    
+    	$Content = ConvertFrom-Json -InputObject $Response.Content
+        $translated = ""
+    	foreach ($item in $Content.translations) {
+    		Write-Host "Language: $($item.to), Text: $($item.text)."
+    		$translated = $item.text
+    	}
+    	return $translated
+        
+    }
+    
+    #------------------------------------------
+    
+    try 
+    {
+        
+        # Get options
+        $options = @{
+            "Polish"="pl"
+            "Portuguese"="pt"
+            "Estonian"="et"
+        }    
+        $props = @{
+            Parameters = @(
+                @{
+                    Name="mode"; 
+                    Title="Translate version for the item"; 
+                    Options=$options; 
+                    Editor="radio"; 
+                    Value="Smart"
+                    Mandatory = $true;
+                }
+            )
+            Title = "Translate version for the item"
+            Description = "Select the language"
+            Width = 300
+            Height = 300
+        }
+        $result = Read-Variable @props
+        if($result -ne "ok") {
+            Exit
+        }
+       
+       #demo for one single item
+       $items = Get-Item -Path "master://sitecore/Content/home/Sample Item"
+       
+       #uncomment to receive from 'HorseShoe Tool'
+       #$items = $params.Items
+       
+        Foreach ($item in $items) {
+            Add-ItemVersion $item -Language "en" -TargetLanguage $mode
+            
+            #Get the item with the new language
+            $itemLanguage =  Get-Item -Path $item.Paths.Path -Language $mode
+            $fieldList = $itemLanguage.Fields | Where-Object { $_.Type -eq "Single-line Text" -or $_.Type -eq "Rich Text" }
+    
+            $itemLanguage.Editing.BeginEdit()
+    
+            foreach ($field in $fieldList) {
+    
+                Write-Host "Translate Value: $($field.Value)"
+            
+                if (-not ([string]::IsNullOrEmpty($field.Value)))
+                {
+                    $translated =  Get-Translation $field.Value $mode
+                    $field.Value = $translated
+                    Write-Host "Translate Value: $($field.Value)"
+                }
+            }
+    
+           $itemLanguage.Editing.EndEdit();
+    
+        }
+    }
+    catch {
+        $ErrorMessage = $_.Exception.Message
+        Write-Host $ErrorMessage
+    
+        return $false
+    }
+    return $true
+    
+    
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20210306T124714Z
+    - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
+      Hint: __Owner
+      Value: |
+        sitecore\jneto
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\jneto
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "1fdaba27-31dd-4d00-8d23-f359112b001d"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\jneto
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20210306T161806Z
