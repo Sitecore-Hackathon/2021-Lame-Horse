@@ -28,9 +28,8 @@ This module enhances the Powershell Reports enabling marketers to run the follow
 
 ## Video link
 
-⟹ Provide a video highlighing your Hackathon module submission and provide a link to the video. You can use any video hosting, file share or even upload the video to this repository. _Just remember to update the link below_
-
-⟹ [Replace this Video link](#video-link)
+[Sitecore Hackathon 2021 - Lame Horse Team
+Video](https://youtu.be/S6i68yu3W3U)
 
 ## Pre-requisites and Dependencies
 
