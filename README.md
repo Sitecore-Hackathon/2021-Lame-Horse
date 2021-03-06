@@ -1,7 +1,5 @@
 ![Hackathon Logo](docs/images/hackathon.png?raw=true "Hackathon Logo")
 
-# Sitecore Hackathon 2021
-
 ## Team name
 
 Lame Horse
