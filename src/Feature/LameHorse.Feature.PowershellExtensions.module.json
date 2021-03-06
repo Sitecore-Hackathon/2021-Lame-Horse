@@ -13,7 +13,7 @@
             },
             {
                 "name": "ProcessingButton",
-                "path": "/sitecore/system/Modules/PowerShell/Script Library/SPE/Core/Platform/Internal/List View/Export/Horseshoes",
+                "path": "/sitecore/system/Modules/PowerShell/Script Library/SPE/Core/Platform/Internal/List View/Ribbon/Item/Process Items",
                 "rules": [
                 ]
             }
