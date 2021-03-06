@@ -10,13 +10,12 @@ SharedFields:
 - ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
   Hint: Script
   Value: |
-    # Get script
+    # Get script from user selection
     $props = @{
         Parameters = @(
             @{
                 Name="script"; 
                 Title="Select processing script"; 
-                Options=$options; 
                 Editor="droptree"; 
                 Mandatory = $true;
                 Source="/sitecore/system/Modules/PowerShell/Script Library/Horseshoes/Reporting/Processing"
@@ -58,15 +57,19 @@ SharedFields:
     $scriptReturn = $script | Invoke-Script -ArgumentList $arguments
     
     # Show results
+    $count = $reportItems.Length
+    $plural = "item"
+    if ($count -gt 1){
+        $plural = "items"
+    }
     if ($scriptReturn -eq $true) {
-        $count = $reportItems.Length
-        Show-Alert "$($count) items processed successfuly!"
+        Show-Alert "$count $plural processed successfuly!"
     }
     elseif ($scriptReturn -eq $false) {
-        Show-Alert "Error processing items."
+        Show-Alert "Error processing $plural"
     }
     else {
-        Show-Alert "Error processing items: $scriptReturn"
+        Show-Alert "Error processing $plural - $scriptReturn"
     }
 Languages:
 - Language: da
@@ -110,11 +113,11 @@ Languages:
       Value: 20130911T202600Z
     - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
       Hint: __Revision
-      Value: "b32a01d3-c953-4a78-af29-e5a91f0e0ae7"
+      Value: "5659a7c1-f24c-4c8c-87a2-53319e046258"
     - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
       Hint: __Updated by
       Value: |
         sitecore\admin
     - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
       Hint: __Updated
-      Value: 20210306T063442Z
+      Value: 20210306T072101Z
