@@ -4,186 +4,186 @@ Parent: "a5f8e957-c6c6-4f99-9244-2def9adcf522"
 Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
 Path: /sitecore/system/Modules/PowerShell/Script Library/Horseshoes/Reporting/Processing/Tinify Images
 SharedFields:
-    - ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
-      Hint: Script
-      Value: |
-          param($params)
-
-          # Generate an API key: https://tinypng.com/developers
-          $apiKey = "S1Z0j8XRJ0G4KS31lB4QSBNkqXRTj8Ch"
-          $apiUrl = "https://api.tinify.com/shrink"
-
-          try {
-              function TinifyImage($mediaItem) 
-              {
-
-                  $apiAuthorization = "api:$apiKey"
-                  $encodedCreds = [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes($apiAuthorization))
-                  $basicAuthValue = "Basic $encodedCreds"
-                  
-                  $Headers = @{
-                      Authorization = $basicAuthValue
-                  }
-                  
-                  $blobField = $mediaItem.InnerItem.Fields["blob"]
-                  $blobStream = $blobField.GetBlobStream()
-                  
-                  Try {
-                      $request = Invoke-RestMethod -Method Post -Uri $apiUrl -Headers $Headers -Body $blobStream
-                  
-                      if ($request.output.url) {
-                          return $request.output.url
-                      }
-                      else {
-                          Write-Error "TinyPNG request failed"
-                          Write-Host ($request | Format-List | Out-String)
-                      }
-                  }
-                  Catch {
-                      Write-Error "TinyPNG request failed"
-                      Break
-                  }
-              }
-                  
-              # Sets the $mediaItem to the image at $url
-              function SetMedia($mediaItem, $url) 
-              { 
-                  
-                  $extension = $mediaItem.Extension
-
-                  # Download file to temporary location
-                  $optimizedImgFolder = "$SitecoreDataFolder\image optimization\new"
-                  $filePath = BuildMediaFilePath $mediaItem $optimizedImgFolder
-                  $fileSavedToDisk = SaveMediaToFileSystem $mediaItem $url $optimizedImgFolder
-                  
-                  # Set the media stream to be the file system file
-                  if ($fileSavedToDisk)
-                  {
-                      $stream = New-Object -TypeName System.IO.FileStream -ArgumentList $filePath, "Open", "Read"
-                      [Sitecore.Resources.Media.Media] $media = [Sitecore.Resources.Media.MediaManager]::GetMedia($mediaItem);
-                      $media.SetStream($stream, $extension);
-                      $stream.Close();
-                  }
-                  else {
-                      Write-Error "Image optimization failed for $mediaItem.Id"
-                  }
-
-                  # Delete temporary file
-                  #Remove-Item $filePath
-
-              }
-
-              function SaveMediaToFileSystem($mediaItem, $mediaUrl, $folder)
-              {
-                  if ($mediaUrl)
-                  {
-                      
-                      Test-Path $folder       
-                      
-                      if ((Test-Path $folder) -eq 0) {
-                          New-Item -ItemType Directory -Force -Path $folder
-                      }
-                     
-                      $filePath = BuildMediaFilePath $mediaItem $folder
-
-                      try 
-                      {
-                          Invoke-WebRequest -Uri $mediaUrl -OutFile $filePath
-                      }
-                      Catch {
-                          Write-Error "Web request for $mediaUrl failed"
-                          return $false
-                      }
-
-                      return $true
-                      
-                  }
-                  else{
-                      return $false
-                  }   
-              }
-
-              function BuildMediaFilePath($mediaItem, $folder)
-              {
-                  # Generate a unique name here to avoid collisions
-                  $extension = $mediaItem.Extension
-                  $mediaShortId = New-Object "Sitecore.Data.ShortID" $mediaItem.Id
-                  $filePath = "$folder\$mediaShortId.$extension"
-                  return $filePath
-              }
-
-              function GetSitecoreMediaUrl($mediaItem)
-              {      
-                  [Sitecore.Context]::SetActiveSite("website")
-                  [Sitecore.Links.UrlBuilders.MediaUrlBuilderOptions]$mediaOptions = New-Object -TypeName 'Sitecore.Links.UrlBuilders.MediaUrlBuilderOptions'
-                  $mediaOptions.AbsolutePath = $true
-                  $mediaOptions.AlwaysIncludeServerUrl = $true
-                  return [Sitecore.Resources.Media.MediaManager]::GetMediaUrl($mediaItem, $mediaOptions) 
-              }
-                  
-              $result = Show-Confirm -Title "This operation can take a long time to finish. Are you sure you want to continue?"
-              if($result -ne "yes") {
-                  Exit
-              }
-                  
-              $images = $params.Items | Where-Object {($_.TemplateId -eq "{F1828A2C-7E5D-4BBD-98CA-320474871548}" -or $_.TemplateId -eq "{DAF085E8-602E-43A6-8299-038FF171349F}" -or $_.TemplateId -eq "{C97BA923-8009-4858-BDD5-D8BE5FCCECF7}" -or $_.TemplateId -eq "{EB3FB96C-D56B-4AC9-97F8-F07B24BB9BF7}") }
-
-              Write-Host "Images to optimize: " $images.count
-
-              foreach ($scItem in $images)
-              {
-
-                  $mediaItem = New-Object "Sitecore.Data.Items.MediaItem" $scItem
-                  Write-Host "Media ID: " $mediaItem.Id
-
-                  $currentMediaUrl =  GetSitecoreMediaUrl($mediaItem)
-                  $fileSavedToDisk = SaveMediaToFileSystem $mediaItem $currentMediaUrl "$SitecoreDataFolder\image optimization\old"
-
-                  if ($fileSavedToDisk){
-                      $optimizedImageUrl = TinifyImage($mediaItem)
-                      if ($optimizedImageUrl) {
-                          Write-Host "Tiny PNG optimized url: $optimizedImageUrl"
-                          SetMedia $mediaItem $optimizedImageUrl
-                      } else {
-                          Write-Error "Tiny PNG failed"
-                      }
-                  }
-                  else {
-                      Write-Error "Image optimization cancelled for $mediaItem.Id because the original media could not be saved to disk."
-                  }
-                  
-              }
-
-          }
-          catch {
-              return $false
-          }
-
-          return $true
-
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    param($params)
+    
+    # Generate an API key: https://tinypng.com/developers
+    $apiKey = "S1Z0j8XRJ0G4KS31lB4QSBNkqXRTj8Ch"
+    $apiUrl = "https://api.tinify.com/shrink"
+    
+    try {
+        function TinifyImage($mediaItem) 
+        {
+    
+            $apiAuthorization = "api:$apiKey"
+            $encodedCreds = [System.Convert]::ToBase64String([System.Text.Encoding]::ASCII.GetBytes($apiAuthorization))
+            $basicAuthValue = "Basic $encodedCreds"
+            
+            $Headers = @{
+                Authorization = $basicAuthValue
+            }
+            
+            $blobField = $mediaItem.InnerItem.Fields["blob"]
+            $blobStream = $blobField.GetBlobStream()
+            
+            Try {
+                $request = Invoke-RestMethod -Method Post -Uri $apiUrl -Headers $Headers -Body $blobStream
+            
+                if ($request.output.url) {
+                    return $request.output.url
+                }
+                else {
+                    Write-Error "TinyPNG request failed"
+                    Write-Host ($request | Format-List | Out-String)
+                }
+            }
+            Catch {
+                Write-Error "TinyPNG request failed"
+                Break
+            }
+        }
+            
+        # Sets the $mediaItem to the image at $url
+        function SetMedia($mediaItem, $url) 
+        { 
+            
+            $extension = $mediaItem.Extension
+    
+            # Download file to temporary location
+            $optimizedImgFolder = "$SitecoreDataFolder\image optimization\new"
+            $filePath = BuildMediaFilePath $mediaItem $optimizedImgFolder
+            $fileSavedToDisk = SaveMediaToFileSystem $mediaItem $url $optimizedImgFolder
+            
+            # Set the media stream to be the file system file
+            if ($fileSavedToDisk)
+            {
+                $stream = New-Object -TypeName System.IO.FileStream -ArgumentList $filePath, "Open", "Read"
+                [Sitecore.Resources.Media.Media] $media = [Sitecore.Resources.Media.MediaManager]::GetMedia($mediaItem);
+                $media.SetStream($stream, $extension);
+                $stream.Close();
+            }
+            else {
+                Write-Error "Image optimization failed for $mediaItem.Id"
+            }
+    
+            # Delete temporary file
+            #Remove-Item $filePath
+    
+        }
+    
+        function SaveMediaToFileSystem($mediaItem, $mediaUrl, $folder)
+        {
+            if ($mediaUrl)
+            {
+                
+                Test-Path $folder       
+                
+                if ((Test-Path $folder) -eq 0) {
+                    New-Item -ItemType Directory -Force -Path $folder
+                }
+               
+                $filePath = BuildMediaFilePath $mediaItem $folder
+    
+                try 
+                {
+                    Invoke-WebRequest -Uri $mediaUrl -OutFile $filePath
+                }
+                Catch {
+                    Write-Error "Web request for $mediaUrl failed"
+                    return $false
+                }
+    
+                return $true
+                
+            }
+            else{
+                return $false
+            }   
+        }
+    
+        function BuildMediaFilePath($mediaItem, $folder)
+        {
+            # Generate a unique name here to avoid collisions
+            $extension = $mediaItem.Extension
+            $mediaShortId = New-Object "Sitecore.Data.ShortID" $mediaItem.Id
+            $filePath = "$folder\$mediaShortId.$extension"
+            return $filePath
+        }
+    
+        function GetSitecoreMediaUrl($mediaItem)
+        {      
+            [Sitecore.Context]::SetActiveSite("website")
+            [Sitecore.Links.UrlBuilders.MediaUrlBuilderOptions]$mediaOptions = New-Object -TypeName 'Sitecore.Links.UrlBuilders.MediaUrlBuilderOptions'
+            $mediaOptions.AbsolutePath = $true
+            $mediaOptions.AlwaysIncludeServerUrl = $true
+            return [Sitecore.Resources.Media.MediaManager]::GetMediaUrl($mediaItem, $mediaOptions) 
+        }
+            
+        $result = Show-Confirm -Title "This operation can take a long time to finish. Are you sure you want to continue?"
+        if($result -ne "yes") {
+            Exit
+        }
+            
+        $images = $params.Items | Where-Object {($_.TemplateId -eq "{F1828A2C-7E5D-4BBD-98CA-320474871548}" -or $_.TemplateId -eq "{DAF085E8-602E-43A6-8299-038FF171349F}" -or $_.TemplateId -eq "{C97BA923-8009-4858-BDD5-D8BE5FCCECF7}" -or $_.TemplateId -eq "{EB3FB96C-D56B-4AC9-97F8-F07B24BB9BF7}") }
+    
+        Write-Host "Images to optimize: " $images.count
+    
+        foreach ($scItem in $images)
+        {
+    
+            $mediaItem = New-Object "Sitecore.Data.Items.MediaItem" $scItem
+            Write-Host "Media ID: " $mediaItem.Id
+    
+            $currentMediaUrl =  GetSitecoreMediaUrl($mediaItem)
+            $fileSavedToDisk = SaveMediaToFileSystem $mediaItem $currentMediaUrl "$SitecoreDataFolder\image optimization\old"
+    
+            if ($fileSavedToDisk){
+                $optimizedImageUrl = TinifyImage($mediaItem)
+                if ($optimizedImageUrl) {
+                    Write-Host "Tiny PNG optimized url: $optimizedImageUrl"
+                    SetMedia $mediaItem $optimizedImageUrl
+                } else {
+                    Write-Error "Tiny PNG failed"
+                }
+            }
+            else {
+                Write-Error "Image optimization cancelled for $mediaItem.Id because the original media could not be saved to disk."
+            }
+            
+        }
+    
+    }
+    catch {
+        return $false
+    }
+    
+    return $true
+    
 Languages:
-    - Language: en
-      Versions:
-          - Version: 1
-            Fields:
-                - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
-                  Hint: __Created
-                  Value: 20210306T124133Z
-                - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
-                  Hint: __Owner
-                  Value: |
-                      sitecore\Admin
-                - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
-                  Hint: __Created by
-                  Value: |
-                      sitecore\Admin
-                - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
-                  Hint: __Revision
-                  Value: "8d1143fa-f5f8-47b8-87ca-9bad01896ead"
-                - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
-                  Hint: __Updated by
-                  Value: |
-                      sitecore\admin
-                - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
-                  Hint: __Updated
-                  Value: 20210306T150551Z
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20210306T124133Z
+    - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
+      Hint: __Owner
+      Value: |
+        sitecore\Admin
+    - ID: "5dd74568-4d4b-44c1-b513-0af5f4cda34f"
+      Hint: __Created by
+      Value: |
+        sitecore\Admin
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "8d1143fa-f5f8-47b8-87ca-9bad01896ead"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20210306T150551Z
