@@ -41,7 +41,7 @@ This module enhances the Powershell Reports enabling marketers to run the follow
 ## Installation instructions
 
 1.  Install Sitecore Powershel Extensions Module 6.2
-2.  Install the package LameHorse.Horseshoes-1.0.zip
+2.  Install the package [LameHorse.Horseshoes-1.0.zip](/sc.packages/LameHorse.Horseshoes-1.0.zip)
 
 ## Development instructions
 
@@ -79,41 +79,19 @@ dotnet sitecore ser push
 
 This command line will push the serialized items from the file system into the Sitecore instance.
 
-### Configuration
+## Configuration
 
-⟹ If there are any custom configuration that has to be set manually then remember to add all details here.
+**Tinify**
 
-_Remove this subsection if your entry does not require any configuration that is not fully covered in the installation instructions already_
+You should create your own API key and update it in the item `/sitecore/system/Modules/PowerShell/Script Library/Horseshoes/Reporting/Processing/Tinify Images`. The API key can be created by accessing the link https://tinypng.com/developers. For the Hackathon, we left our own free tier API key configured so the judges can reuse them when evaluating the solution.
+
+**Azure Cognitive Services**
+
+You should create your own Microsoft Azure Cognitive Services (Translator) and update the key and location in the item `/sitecore/system/Modules/PowerShell/Script Library/Horseshoes/Reporting/Processing/Translate`. For the Hackathon, we left our free tier API key configured so the judges can reuse them when evaluating the solution.
 
 ## Usage instructions
 
-### Translate items listed in a Powershell report using Microsoft Cognitive Services (Translator)
-
-The following example shows how you can use Microsoft Cognitive Services (Translator) to translate items listed in a Powershell report.
-In Sitecore:
-
-1. Click on the desktop icon
-2. Next, click on **Reporting Tools** > **Content Audit** > **Items last updated**
-
-![How to 6](/docs/images/how-to-06.png "How to 6")
-
-3. In the Report Filter, select the criteria that yields any results.
-
-![How to 7](/docs/images/how-to-07.png "How to 7")
-
-4. In the **Items last updated** dialog, click on **Process Items**. The processing script dialog will show up.
-
-![How to 8](/docs/images/how-to-08.png "How to 8")
-
-5. In the **Select processing script** combobox, select the option **Processing/Create Version and Translate**. All the images will be sent to Tinify API and compressed.
-
-6. In the **Translate version for the item** dialog, select a target language and click OK.
-
-![How to 9](/docs/images/how-to-09.png "How to 9")
-
-> Continuar daqui
-
-## Shrink all images listed in a Powershell report
+### Shrink all images listed in a Powershell report
 
 The following example shows how you can use Tinify to shrink all images listed in a Powershell report.
 In Sitecore:
@@ -136,6 +114,98 @@ In Sitecore:
 5. In the **Select processing script** combobox, select the option **Processing/Tinify Images**. All the images will be sent to Tinify API and compressed.
 
 ![How to 5](/docs/images/how-to-05.png "How to 5")
+
+### Translate items listed in a Powershell report using Microsoft Azure Cognitive Services (Translator)
+
+The following example shows how you can use Microsoft Cognitive Services (Translator) to translate items listed in a Powershell report.
+In Sitecore:
+
+1. Click on the desktop icon
+2. Next, click on **Reporting Tools** > **Content Audit** > **Items last updated**
+
+![How to 6](/docs/images/how-to-06.png "How to 6")
+
+3. In the Report Filter, select the criteria that yields any results.
+
+![How to 7](/docs/images/how-to-07.png "How to 7")
+
+4. In the **Items last updated** dialog, click on **Process Items**. The processing script dialog will show up.
+
+![How to 8](/docs/images/how-to-08.png "How to 8")
+
+5. In the **Select processing script** combobox, select the option **Processing/Translate**. All the images will be sent to Tinify API and compressed.
+
+6. In the **Translate item from English into any target language** dialog, select a target language and click OK.
+
+![How to 9](/docs/images/how-to-09.png "How to 09")
+
+The selected items will be translated into the target selected language.
+
+![How to 9](/docs/images/how-to-10.png "How to 10")
+
+### Create Empty version for language
+
+1. Following the same procedure described above to generate a report with Powershell Extensions, In the **Select processing script** combobox, select the option **Processing/Create Version for language**.
+
+![How to 11](/docs/images/how-to-11.png "How to 11")
+
+2. In the **Create empty version for a given language** dialog, select the target language and click OK.
+
+The selected items will have a new version created in the target selected language.
+
+![How to 12](/docs/images/how-to-12.png "How to 12")
+
+### Publish
+
+1. Following the same procedure described above to generate a report with Powershell Extensions, In the **Select processing script** combobox, select the option **Processing/Publish**.
+
+2. In the **Publish Items** dialog, select the publish option and click OK.
+
+![How to 14](/docs/images/how-to-14.png "How to 14")
+
+The selected items will be published accordingly.
+
+### Remove versions from all languages but one
+
+1. Following the same procedure described above to generate a report with Powershell Extensions, In the **Select processing script** combobox, select the option **Processing/Remove versions from all languages but one**.
+
+![How to 15](/docs/images/how-to-15.png "How to 15")
+
+2. In the **Remove all version from all languages but the selected** dialog, select the language you want to keep and click OK.
+
+![How to 16](/docs/images/how-to-16.png "How to 16")
+
+The selected items will have all languages removed except the one you've selected previously.
+
+### Remove versions from language
+
+1. Following the same procedure described above to generate a report with Powershell Extensions, In the **Select processing script** combobox, select the option **Processing/Remove versions from language**.
+
+2. In the **Remove versions from language** dialog, select the language you want to have the versions removed and click OK.
+
+The selected items will have all versions removed for the selected language.
+
+### Replace string in fields
+
+1. Following the same procedure described above to generate a report with Powershell Extensions, In the **Select processing script** combobox, select the option **Processing/Replace string in fields**.
+
+2. In the **Replace string in fields** dialog, enter the old text in the field **Find** and the new text in the field **Replace**, and click OK.
+
+![How to 17](/docs/images/how-to-17.png "How to 17")
+
+The selected items will old text replaced in all fields.
+
+![How to 18](/docs/images/how-to-18.png "How to 18")
+
+### Download Package
+
+1. Following the same procedure described above to generate a report with Powershell Extensions, In the **Select processing script** combobox, select the option **Processing/Download Package**.
+
+2. In the **Download** dialog, click Download.
+
+![How to 19](/docs/images/how-to-19.png "How to 19")
+
+A Sitecore package will be downloaded with the items listed in the report.
 
 ## Comments
 

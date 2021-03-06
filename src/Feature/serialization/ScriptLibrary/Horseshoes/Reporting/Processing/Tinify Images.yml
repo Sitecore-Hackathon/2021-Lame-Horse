@@ -141,7 +141,7 @@ SharedFields:
     
             if ($fileSavedToDisk){
                 $optimizedImageUrl = TinifyImage($mediaItem)
-                if ($location) {
+                if ($optimizedImageUrl) {
                     Write-Host "Tiny PNG optimized url: $optimizedImageUrl"
                     SetMedia $mediaItem $optimizedImageUrl
                 } else {
