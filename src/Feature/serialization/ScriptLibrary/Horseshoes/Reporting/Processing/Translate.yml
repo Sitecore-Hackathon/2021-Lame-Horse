@@ -2,7 +2,7 @@
 ID: "fe306375-3b06-4baa-87ec-517c957c3f73"
 Parent: "a5f8e957-c6c6-4f99-9244-2def9adcf522"
 Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
-Path: /sitecore/system/Modules/PowerShell/Script Library/Horseshoes/Reporting/Processing/Create Version and Translate
+Path: /sitecore/system/Modules/PowerShell/Script Library/Horseshoes/Reporting/Processing/Translate
 SharedFields:
 - ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
   Hint: Script
@@ -49,69 +49,67 @@ SharedFields:
     try 
     {
         
-        # Get options
-        $options = @{
-            "Polish"="pl"
-            "Portuguese"="pt"
-            "Estonian"="et"
-        }    
+        # Get language options
+        $languageNodes = [Sitecore.Xml.XmlUtil]::GetChildNodes("language", [Sitecore.Xml.XmlUtil]::GetChildNode("languages", [Sitecore.Configuration.Factory]::GetConfigNode("languageDefinitions")));
+        $options = [ordered]@{""=""}
+        foreach($languageNode in $languageNodes){
+            $key = $languageNode.id
+            if (-not [string]::IsNullOrEmpty($languageNode.region)){
+                $key += "-$($languageNode.region)"
+            }
+            $cultureInfo = [Sitecore.Globalization.Language]::CreateCultureInfo($key)
+            $value = [Sitecore.Globalization.Language]::GetDisplayName($cultureInfo)
+            $options.add($value,$key)
+        }
+        
         $props = @{
             Parameters = @(
                 @{
-                    Name="mode"; 
-                    Title="Translate version for the item"; 
+                    Name="language"; 
+                    Title="Language"; 
                     Options=$options; 
-                    Editor="radio"; 
-                    Value="Smart"
+                    Editor="tristate"; 
+                    Value="";
                     Mandatory = $true;
                 }
             )
-            Title = "Translate version for the item"
+            Title = "Create empty version for a given language"
             Description = "Select the language"
-            Width = 300
-            Height = 300
+            Width = 500
+            Height = 250
         }
+    
         $result = Read-Variable @props
         if($result -ne "ok") {
             Exit
         }
        
-       #demo for one single item
-       $items = Get-Item -Path "master://sitecore/Content/home/Sample Item"
-       
-       #uncomment to receive from 'HorseShoe Tool'
-       #$items = $params.Items
-       
+        #$items = $params.Items
+        $items = Get-Item -Path "master://sitecore/content/Home"
+        
         Foreach ($item in $items) {
-            Add-ItemVersion $item -Language "en" -TargetLanguage $mode
+            Add-ItemVersion $item -Language "en" -TargetLanguage $language
             
             #Get the item with the new language
-            $itemLanguage =  Get-Item -Path $item.Paths.Path -Language $mode
+            $itemLanguage =  Get-Item -Path "master:$($item.Paths.Path)" -Language $language
             $fieldList = $itemLanguage.Fields | Where-Object { $_.Type -eq "Single-line Text" -or $_.Type -eq "Rich Text" }
     
             $itemLanguage.Editing.BeginEdit()
-    
             foreach ($field in $fieldList) {
-    
-                Write-Host "Translate Value: $($field.Value)"
-            
-                if (-not ([string]::IsNullOrEmpty($field.Value)))
-                {
-                    $translated =  Get-Translation $field.Value $mode
+                if ($field.Name -inotmatch "__" -and -not [string]::IsNullOrEmpty($field.Value)) {
+                    $translated = Get-Translation $field.Value $language
                     $field.Value = $translated
                     Write-Host "Translate Value: $($field.Value)"
                 }
             }
-    
-           $itemLanguage.Editing.EndEdit();
-    
+            $itemLanguage.Editing.EndEdit()
+            
         }
     }
     catch {
-        $ErrorMessage = $_.Exception.Message
+        $ErrorMessage = $_.Exception.StackTrace
         Write-Host $ErrorMessage
-    
-        return $false
+        return $ErrorMessage
     }
     return $true
     
@@ -134,11 +132,11 @@ Languages:
         sitecore\jneto
     - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
       Hint: __Revision
-      Value: "1fdaba27-31dd-4d00-8d23-f359112b001d"
+      Value: "1592d8fe-8daa-4c99-806d-21084423b142"
     - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
       Hint: __Updated by
       Value: |
-        sitecore\jneto
+        sitecore\admin
     - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
       Hint: __Updated
-      Value: 20210306T161806Z
+      Value: 20210306T171638Z
