@@ -2,7 +2,7 @@
 ID: "6489476b-7059-42cf-bf38-3966abb39315"
 Parent: "a5f8e957-c6c6-4f99-9244-2def9adcf522"
 Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
-Path: /sitecore/system/Modules/PowerShell/Script Library/Horseshoes/Reporting/Processing/Create Version for langauge
+Path: /sitecore/system/Modules/PowerShell/Script Library/Horseshoes/Reporting/Processing/Create Version for language
 SharedFields:
 - ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
   Hint: Script
