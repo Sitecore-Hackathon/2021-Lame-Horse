@@ -24,8 +24,7 @@ The module comes with a good number of useful processing scripts for various nee
 
 ## Video link
 
-[Sitecore Hackathon 2021 - Lame Horse Team
-Video](https://youtu.be/S6i68yu3W3U)
+[![Sitecore Hackathon 2021 - Lame Horse Team](http://img.youtube.com/vi/S6i68yu3W3U/0.jpg)](http://www.youtube.com/watch?v=S6i68yu3W3U "Sitecore Hackathon 2021 - Lame Horse Team")
 
 ## Pre-requisites and Dependencies
 
