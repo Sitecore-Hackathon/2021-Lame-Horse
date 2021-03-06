@@ -10,13 +10,17 @@ Best use of SPE to help Content authors and Marketers
 
 ## Description
 
-This module enhances the Powershell Reports enabling marketers to run the following commands on the results:
+This module extends the SPE Reporting List View window, allowing Content Authors and Marketers to process the results in multiple ways.
 
--   Create Version for language
--   Download the results as a package
+The module comes with a good number of useful processing scripts for various needs:
+
 -   Publish the items
--   Remove versions
+-   Replace string in fields
+-   Download the results as a package
 -   Compress Images using Tinify API
+-   Translate items
+-   Remove versions for languages
+-   Create empty version for language
 
 ## Video link
 
