@@ -1,0 +1,100 @@
+﻿---
+ID: "34af5ba1-9e57-46bc-97f2-8b409c7e5aee"
+Parent: "a5f8e957-c6c6-4f99-9244-2def9adcf522"
+Template: "dd22f1b3-bd87-4db2-9e7d-f7a496888d43"
+Path: /sitecore/system/Modules/PowerShell/Script Library/Horseshoes/Reporting/Processing/Download Package
+SharedFields:
+- ID: "b1a94ff0-6897-47c0-9c51-aa6acb80b1f0"
+  Hint: Script
+  Value: |
+    param($params)
+    
+    try {
+        $items = $params.Items
+        
+        # Create package with all items passed
+        $datetime = Get-Date -format "yyyy-MM-d_hhmmss"
+        $packageName = "report-$datetime"
+        $package = New-Package -Name $packageName
+        
+        # Set package metadata
+        $loggedUser = [Sitecore.Context]::User
+        $packageAuthor = "$($loggedUser.Profile.FullName) ($($loggedUser.Name))"
+    
+        $package.Sources.Clear();
+        $package.Name = $packageName
+        $package.Metadata.Author = $packageAuthor
+        $package.Metadata.Publisher = $packageAuthor
+        $package.Metadata.Version = "1.0";
+        $package.Metadata.Readme = "Content exported from powershell report $($packageName)'"
+        
+        # Add content to the package
+        foreach ($item in $items)
+        {
+        	if ($item -ne $null)
+        	{
+        	    $installMode = [Sitecore.Install.Utils.InstallMode]"Merge"
+        	    $mergeMode = [Sitecore.Install.Utils.MergeMode]"Merge"
+    	        $sourceName = $item.Paths.Path
+        	    $isNewSource = $true
+        	    
+        	    # Try to get from existing source
+        	    $source = $package.Sources | Where-Object {$_.Name -eq $sourceName}
+        	    if ($source -ne $null){
+        	        $isNewSource = $false
+        	        $source.Entries.Add([Sitecore.Install.Items.ItemReference]::New($item).ToString())
+        	    }
+        	    
+        	    # Create new source
+        	    if ($isNewSource -eq $true){
+            	    if ($installMode -eq [Sitecore.Install.Utils.InstallMode]::Merge){
+                	    $source = New-ExplicitItemSource -Item $item -Name $sourceName -InstallMode $installMode -MergeMode $mergeMode
+            	    }
+            	    else {
+                	    $source = New-ExplicitItemSource -Item $item -Name $sourceName -InstallMode $installMode
+            	    }
+        		    $package.Sources.Add($source);
+        	    }
+        	}
+        }   
+        
+        # Save package
+        $allSources = $package.Sources
+        $packagePath = "$($package.Name)-$($package.Metadata.Version)"
+        $packagePathZip = "$packagePath.zip"
+        $locationPackage = "$SitecorePackageFolder\$packagePathZip"
+        $package | Export-Package -Path "$packagePath.xml"
+        Export-Package -Project $package -Path $packagePathZip -Zip:$true -IncludeProject:$true
+        
+        # Offer the user to download the package
+        Download-File "$SitecorePackageFolder\$packagePath.zip" 
+        
+        # Delete Package
+        #Remove-Item -Path $uploadedItem.InnerItem.Paths.Path
+    }
+    catch {
+        return $false
+    }
+    return $true
+Languages:
+- Language: en
+  Versions:
+  - Version: 1
+    Fields:
+    - ID: "25bed78c-4957-4165-998a-ca1b52f67497"
+      Hint: __Created
+      Value: 20210306T083315Z
+    - ID: "52807595-0f8f-4b20-8d2a-cb71d28c6103"
+      Hint: __Owner
+      Value: |
+        sitecore\admin
+    - ID: "8cdc337e-a112-42fb-bbb4-4143751e123f"
+      Hint: __Revision
+      Value: "d3998f1b-b499-4c4d-8a3e-5e71834af208"
+    - ID: "badd9cf9-53e0-4d0c-bcc0-2d784c282f6a"
+      Hint: __Updated by
+      Value: |
+        sitecore\admin
+    - ID: "d9cf14b1-fa16-4ba6-9288-e8a174d4d522"
+      Hint: __Updated
+      Value: 20210306T093401Z
