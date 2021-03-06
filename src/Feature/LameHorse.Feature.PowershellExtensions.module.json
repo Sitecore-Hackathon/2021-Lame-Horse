@@ -6,9 +6,15 @@
     "items": {
         "includes": [
             {
-                "name": "content",
-                "path": "/sitecore/content/home",
-                "rules": [                    
+                "name": "ScriptLibrary",
+                "path": "/sitecore/system/Modules/PowerShell/Script Library/Horseshoes",
+                "rules": [
+                ]
+            },
+            {
+                "name": "ProcessingButton",
+                "path": "/sitecore/system/Modules/PowerShell/Script Library/SPE/Core/Platform/Internal/List View/Export/Horseshoes",
+                "rules": [
                 ]
             }
         ]
