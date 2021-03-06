@@ -22,6 +22,8 @@ The module comes with a good number of useful processing scripts for various nee
 -   Remove versions for languages
 -   Create empty version for language
 
+> Powershell scripts are used to execute the operations above. New scripts can be easily created to implement totally new operations, by simply dropping them under /sitecore/system/Modules/PowerShell/Script Library/Horseshoes/Reporting/Processing
+
 ## Video link
 
 [![Sitecore Hackathon 2021 - Lame Horse Team](http://img.youtube.com/vi/S6i68yu3W3U/0.jpg)](http://www.youtube.com/watch?v=S6i68yu3W3U "Sitecore Hackathon 2021 - Lame Horse Team")
