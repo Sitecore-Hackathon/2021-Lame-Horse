@@ -10,15 +10,15 @@
 
 ## Team name
 
-⟹ Lame Horse
+Lame Horse
 
 ## Category
 
-⟹ Best use of SPE to help Content authors and Marketers
+Best use of SPE to help Content authors and Marketers
 
 ## Description
 
-⟹ This module enhances the Powershell Reports enabling marketers to run the following commands on the results:
+This module enhances the Powershell Reports enabling marketers to run the following commands on the results:
 
 -   Create Version for language
 -   Download the results as a package
@@ -34,39 +34,44 @@
 
 ## Pre-requisites and Dependencies
 
-⟹ Does your module rely on other Sitecore modules or frameworks?
-
--   List any dependencies
--   Or other modules that must be installed
--   Or services that must be enabled/configured
-
-_Remove this subsection if your entry does not have any prerequisites other than Sitecore_
+-   Sitecore 10.1 - Initial Release
+-   Sitecore Management Services Module 2.0.0
+-   Sitecore Powershel Extensions Module 6.2
 
 ## Installation instructions
 
-⟹ Write a short clear step-wise instruction on how to install your module.
+1.  Install Sitecore Management Services Module 2.0.0 and Sitecore Powershel Extensions Module 6.2 on Sitecore
+2.  At the root folder of the source code run the following command line:
 
-> _A simple well-described installation process is required to win the Hackathon._  
-> Feel free to use any of the following tools/formats as part of the installation:
->
-> -   Sitecore Package files
-> -   Docker image builds
-> -   Sitecore CLI
-> -   msbuild
-> -   npm / yarn
->
-> _Do not use_
->
-> -   TDS
-> -   Unicorn
+```powershell
+dotnet tool restore
+```
 
-f. ex.
+This command line will install locally Sitecore CLI version 2.0.0.
 
-1. Start docker environment using `.\Start-Hackathon.ps1`
-2. Open solution in Visual Studio and run build
-3. Use the Sitecore Installation wizard to install the [package](#link-to-package)
-4. ...
-5. profit
+```
+dotnet sitecore login --authority https://[prefix].identityserver --cm https://[prefix].sc --allow-write true
+```
+
+![Authentication Step 1](/docs/images/authentication-02.png "Authentication Step 1")
+
+A new browser window will open asking to enter credentials and allow Sitecore CLI to access your instance.
+
+![Authentication Step 2](/docs/images/authentication-01.png "Authentication Step 2")
+
+![Authentication Step 3](/docs/images/authentication-03.png "Authentication Step 3")
+
+![Authentication Step 4](/docs/images/authentication-04.png "Authentication Step 4")
+
+![Authentication Step 4](/docs/images/authentication-05.png "Authentication Step 4")
+
+3. Next run the following command line:
+
+```powershell
+dotnet sitecore ser push
+```
+
+This command line will push the serialized items from the file system into the Sitecore instance.
 
 ### Configuration
 
@@ -76,19 +81,29 @@ _Remove this subsection if your entry does not require any configuration that is
 
 ## Usage instructions
 
-⟹ Provide documentation about your module, how do the users use your module, where are things located, what do the icons mean, are there any secret shortcuts etc.
+## Shrink all images listed in a Powershell report
 
-Include screenshots where necessary. You can add images to the `./images` folder and then link to them from your documentation:
+The following example shows how you can use Tinify to shrink all images listed in a Powershell report.
+In Sitecore:
 
-![Hackathon Logo](docs/images/hackathon.png?raw=true "Hackathon Logo")
+1. Click on the desktop icon
+2. Next, click on Reporting Tools > Media Audit > Media items by size and type
 
-You can embed images of different formats too:
+![How to 1](/docs/images/how-to-01.png "How to 1")
 
-![Deal With It](docs/images/deal-with-it.gif?raw=true "Deal With It")
+3. In the Report Filter dialog, click Proceed.
 
-And you can embed external images too:
+![How to 2](/docs/images/how-to-02.png "How to 2")
 
-![Random](https://thiscatdoesnotexist.com/)
+4. In the Media by size and type dialog, click on Process Items. The processing script dialog will show up.
+
+![How to 3](/docs/images/how-to-03.png "How to 3")
+
+![How to 4](/docs/images/how-to-04.png "How to 4")
+
+5. In the **Select processing script** combobox, select the option **Processing/Tinify Images**. All the images will be sent to Tinify API and compressed.
+
+![How to 5](/docs/images/how-to-05.png "How to 5")
 
 ## Comments
 
