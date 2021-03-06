@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "_Solution", "_Solution", "{
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LameHorse.Feature.PowershellExtensions", "src\Foundation\LameHorse.Feature.PowershellExtensions\LameHorse.Feature.PowershellExtensions.csproj", "{DD80B44F-162B-4242-B715-FDB6434A6637}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LameHorse.Feature.PowershellExtensions", "src\Feature\LameHorse.Feature.PowershellExtensions\LameHorse.Feature.PowershellExtensions.csproj", "{DD80B44F-162B-4242-B715-FDB6434A6637}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

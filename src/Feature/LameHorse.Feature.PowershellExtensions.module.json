@@ -1,0 +1,29 @@
+{
+    "namespace": "LameHorse.Feature.PowershellExtensions",
+    "references": [
+        ""
+    ],
+    "items": {
+        "includes": [
+            {
+                "name": "content",
+                "path": "/sitecore/content/home",
+                "rules": [
+                    {
+                        "path": "/products/legacy",
+                        "scope": "ignored"
+                    },
+                    {
+                        "path": "/",
+                        "scope": "ItemAndDescendants",
+                        "allowedPushOperations": "createUpdateAndDelete"
+                    },
+                    {
+                        "path": "*",
+                        "scope": "ignored"
+                    }
+                ]
+            }
+        ]
+    }
+}
