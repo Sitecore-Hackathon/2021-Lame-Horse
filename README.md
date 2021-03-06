@@ -1,4 +1,4 @@
-![Go Horse Cup](docs/images/gohorsecup.webp?raw=true "Go Horse Cup")
+![Go Horse Cup](docs/images/gohorsecup.jpg?raw=true "Go Horse Cup")
 
 ## Team name
 
