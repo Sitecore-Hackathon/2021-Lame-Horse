@@ -41,7 +41,7 @@ This module enhances the Powershell Reports enabling marketers to run the follow
 ## Installation instructions
 
 1.  Install Sitecore Powershel Extensions Module 6.2
-2.  Install the package LameHorse.Horseshoes.zip
+2.  Install the package LameHorse.Horseshoes-1.0.zip
 
 ## Development instructions
 
